@@ -1,0 +1,142 @@
+[gd_scene load_steps=6 format=3 uid="uid://blqy6aj4cny51"]
+
+[ext_resource type="Script" uid="uid://ci358gcxplw63" path="res://scripts/grapher.gd" id="1_65gep"]
+[ext_resource type="Script" uid="uid://d4itilrlhsxfj" path="res://addons/graph_2d/graph_2d.gd" id="2_lmxjw"]
+[ext_resource type="FontFile" uid="uid://6t3otolk5bto" path="res://assets/Poppins-Medium.ttf" id="3_h6fnl"]
+[ext_resource type="Theme" uid="uid://dcfnb5gvmv076" path="res://assets/graph_theme.tres" id="4_l1yi1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65gep"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="Grapher" type="Node2D"]
+script = ExtResource("1_65gep")
+
+[node name="Layout" type="Control" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Layout"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_65gep")
+
+[node name="MarginContainer" type="MarginContainer" parent="Layout/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 55
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 55
+
+[node name="Graph2D" type="Control" parent="Layout/PanelContainer/MarginContainer"]
+z_index = 3
+layout_mode = 2
+script = ExtResource("2_lmxjw")
+y_max = 600.0
+grid_horizontal_visible = true
+grid_horizontal_color = Color(1, 1, 1, 0.517647)
+
+[node name="Text" type="Label" parent="Layout/PanelContainer"]
+visible = false
+z_index = 4
+custom_minimum_size = Vector2(0, 900)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_fonts/font = ExtResource("3_h6fnl")
+theme_override_font_sizes/font_size = 80
+text = "Loading..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tip" type="Label" parent="Layout/PanelContainer"]
+visible = false
+z_index = 4
+custom_minimum_size = Vector2(0, 480)
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("4_l1yi1")
+theme_override_font_sizes/font_size = 25
+text = "You can see the exact point on the graph where your cursor is, look at the top-right."
+horizontal_alignment = 1
+
+[node name="Reset2" type="Label" parent="Layout/PanelContainer"]
+visible = false
+z_index = 3
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("4_l1yi1")
+theme_override_font_sizes/font_size = 25
+text = "Press shift+x to reset to the first page"
+horizontal_alignment = 1
+
+[node name="Reset" type="Label" parent="Layout/PanelContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme = ExtResource("4_l1yi1")
+theme_override_font_sizes/font_size = 22
+text = "Press shift+x to reset to the first page "
+
+[node name="HBox" type="HBoxContainer" parent="Layout"]
+z_index = 7
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+
+[node name="S" type="Label" parent="Layout/HBox"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+theme = ExtResource("4_l1yi1")
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+text = "Standard"
+
+[node name="R" type="Label" parent="Layout/HBox"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 8
+theme = ExtResource("4_l1yi1")
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+text = "Rapid"
+
+[node name="B" type="Label" parent="Layout/HBox"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 8
+theme = ExtResource("4_l1yi1")
+theme_override_colors/font_color = Color(0.118, 0.564, 1, 1)
+text = "Blitz"
+
+[node name="ECF Rating" type="Label" parent="."]
+z_index = 4
+offset_left = 33.0
+offset_top = 595.0
+offset_right = 172.0
+offset_bottom = 633.0
+rotation = 4.71239
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_h6fnl")
+theme_override_font_sizes/font_size = 26
+text = "ECF Rating"
+
+[node name="Time" type="Label" parent="."]
+z_index = 5
+offset_left = 925.0
+offset_top = 1007.0
+offset_right = 990.0
+offset_bottom = 1045.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_h6fnl")
+theme_override_font_sizes/font_size = 26
+text = "Time"

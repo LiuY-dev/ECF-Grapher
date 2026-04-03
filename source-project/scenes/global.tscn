@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpn2ubj6oqoky"]
+
+[ext_resource type="Script" uid="uid://diwhx31rddthj" path="res://scripts/global.gd" id="1_4pk28"]
+[ext_resource type="PackedScene" uid="uid://bc7n6e24jslre" path="res://scenes/input_reciever.tscn" id="2_nmxvb"]
+
+[node name="Global" type="Node2D"]
+script = ExtResource("1_4pk28")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+timeout = 20.0
+
+[node name="Input_Reciever" parent="." instance=ExtResource("2_nmxvb")]
+
+[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

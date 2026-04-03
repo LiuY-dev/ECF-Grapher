@@ -1,0 +1,182 @@
+[gd_scene load_steps=11 format=3 uid="uid://bc7n6e24jslre"]
+
+[ext_resource type="Script" uid="uid://d0713vv51drn5" path="res://scripts/input_reciever.gd" id="1_hks68"]
+[ext_resource type="Theme" uid="uid://2o2cdg5rolg" path="res://assets/text_theme.tres" id="1_lj0ep"]
+[ext_resource type="FontFile" uid="uid://6t3otolk5bto" path="res://assets/Poppins-Medium.ttf" id="2_atm8d"]
+[ext_resource type="Theme" uid="uid://dcfnb5gvmv076" path="res://assets/graph_theme.tres" id="4_5sgrt"]
+[ext_resource type="Texture2D" uid="uid://dlshdudqrrvog" path="res://assets/sprites/red_square.png" id="5_34pof"]
+[ext_resource type="Texture2D" uid="uid://dwel0r4o382r5" path="res://assets/sprites/red_square_tick.png" id="5_ay2aa"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7u7y"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_34pof"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ay2aa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7qkhl"]
+
+[node name="Input_Reciever" type="Node2D"]
+script = ExtResource("1_hks68")
+
+[node name="Layout" type="Control" parent="."]
+custom_minimum_size = Vector2(1920, 1080)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Panel_Box" type="PanelContainer" parent="Layout"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c7u7y")
+
+[node name="Margin" type="MarginContainer" parent="Layout/Panel_Box"]
+layout_mode = 2
+theme_override_constants/margin_left = 500
+theme_override_constants/margin_top = 180
+theme_override_constants/margin_right = 500
+theme_override_constants/margin_bottom = 100
+
+[node name="V_Box" type="VBoxContainer" parent="Layout/Panel_Box/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Prompt" type="Label" parent="Layout/Panel_Box/Margin/V_Box"]
+layout_mode = 2
+theme = ExtResource("1_lj0ep")
+text = "Enter an ECF rating code:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="spacing" type="Control" parent="Layout/Panel_Box/Margin/V_Box"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Text_Edit" type="TextEdit" parent="Layout/Panel_Box/Margin/V_Box"]
+z_index = 1
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_colors/background_color = Color(0.698039, 0.133333, 0.133333, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_atm8d")
+theme_override_font_sizes/font_size = 40
+placeholder_text = "Type here..."
+
+[node name="spacing_2" type="Control" parent="Layout/Panel_Box/Margin/V_Box"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="Layout/Panel_Box/Margin/V_Box"]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/separation = 45
+
+[node name="VBox" type="VBoxContainer" parent="Layout/Panel_Box/Margin/V_Box/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBox" type="HBoxContainer" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox"]
+layout_mode = 2
+
+[node name="C" type="Label" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox/HBox"]
+layout_mode = 2
+theme = ExtResource("4_5sgrt")
+theme_override_font_sizes/font_size = 48
+text = "Standard:"
+
+[node name="Check" type="CheckBox" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox/HBox"]
+custom_minimum_size = Vector2(68, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_34pof")
+theme_override_icons/checked = ExtResource("5_ay2aa")
+theme_override_icons/unchecked = ExtResource("5_34pof")
+button_pressed = true
+action_mode = 0
+
+[node name="HBox2" type="HBoxContainer" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox"]
+layout_mode = 2
+
+[node name="R" type="Label" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox/HBox2"]
+layout_mode = 2
+theme = ExtResource("4_5sgrt")
+theme_override_font_sizes/font_size = 48
+text = "Rapid:"
+
+[node name="Check" type="CheckBox" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox/HBox2"]
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ay2aa")
+theme_override_icons/checked = ExtResource("5_ay2aa")
+theme_override_icons/unchecked = ExtResource("5_34pof")
+button_pressed = true
+action_mode = 0
+
+[node name="HBox3" type="HBoxContainer" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox"]
+layout_mode = 2
+
+[node name="B" type="Label" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox/HBox3"]
+layout_mode = 2
+theme = ExtResource("4_5sgrt")
+theme_override_font_sizes/font_size = 48
+text = "Blitz:"
+
+[node name="Check" type="CheckBox" parent="Layout/Panel_Box/Margin/V_Box/HBox/VBox/HBox3"]
+layout_mode = 2
+size_flags_horizontal = 10
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7qkhl")
+theme_override_icons/checked = ExtResource("5_ay2aa")
+theme_override_icons/unchecked = ExtResource("5_34pof")
+action_mode = 0
+
+[node name="HBox" type="VBoxContainer" parent="Layout/Panel_Box/Margin/V_Box/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Time_prompt" type="Label" parent="Layout/Panel_Box/Margin/V_Box/HBox/HBox"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_atm8d")
+theme_override_font_sizes/font_size = 42
+text = "Timescale (months):  "
+
+[node name="Text_Edit" type="TextEdit" parent="Layout/Panel_Box/Margin/V_Box/HBox/HBox"]
+custom_minimum_size = Vector2(70, 70)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/background_color = Color(0.698039, 0.133333, 0.133333, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_atm8d")
+theme_override_font_sizes/font_size = 40
+placeholder_text = "Enter a single integer..."
+
+[node name="spacing_3" type="Control" parent="Layout/Panel_Box/Margin/V_Box"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="how2submit" type="Label" parent="Layout/Panel_Box/Margin/V_Box"]
+layout_mode = 2
+size_flags_vertical = 2
+theme = ExtResource("4_5sgrt")
+theme_override_font_sizes/font_size = 30
+text = "Press shift+z to enter your choices"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Layout/Panel_Box"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme = ExtResource("4_5sgrt")
+theme_override_font_sizes/font_size = 20
+text = "This software was not made by or otherwise licensed by ECF"
