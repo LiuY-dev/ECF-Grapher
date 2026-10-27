@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--
+    To do list:
+    
+-->
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>ECF Grapher</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="assets/modules/popups.css">
+        <link rel="icon" href="assets/icons/ecf-grapher.ico">
+    </head>
+    <body>
+        <div id="choose_settings_page">
+            <div style="font-size: 2.5rem; font-weight: 600; text-align: center; margin-block: 30px;">
+                Choose your Inputs
+            </div>
+            <div style="display: flex; align-items:stretch; justify-content: center; flex-direction: column; height: auto; width: 80%; max-width: 800px; margin-inline: auto;">
+                <div>
+                    <span class="input_prompt">
+                        ECF Rating Code
+                    </span>
+                    <input type="text" class="textinput" id="rating_code_input" placeholder="E.g. 123456">
+                </div>
+
+                <div style="display: flex; margin-top: 50px; justify-content: space-between;">
+                    <div style="width: 45%; display: flex; flex-direction: column;">
+                        <span class="input_prompt">
+                            Time Controls
+                        </span>
+                        
+                        <div style="display: flex; flex-direction: column; justify-content: space-between; height: 150px; margin-top: 10px;">
+                            <div class="check_pair_container">
+                                <span class="input_prompt">
+                                    Standard
+                                </span>
+                                <input type="checkbox" class="check" id="S_input" checked>
+                            </div>
+                            <div class="check_pair_container">
+                                <span class="input_prompt">
+                                    Rapid
+                                </span>
+                                <input type="checkbox" class="check" id="R_input">
+                            </div>
+                            <div class="check_pair_container">
+                                <span class="input_prompt">
+                                    Blitz
+                                </span>
+                                <input type="checkbox" class="check" id="B_input">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="width: 45%;">
+                        <span class="input_prompt">
+                            Timescale (months)
+                        </span>
+                        <input type="number" class="textinput" min="1" id="timescale_input" value="24">
+                    </div>
+                </div>
+                <div>
+                    <button id="go_button">
+                        Go
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <template id="loading_screen">
+            <div style="height: 100vh; width: 100vw; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+                <span style="font-size: 3rem;">Retrieving ratings...</span>
+            </div>
+        </template>
+
+        <template id="info_book">
+            <div id="info_book_clon" style="height: 100vh; width: 100vw; position: fixed; top: 0; justify-content: center; align-items: center; display: flex; background-color: rgba(0,0,0,0.6); z-index: 1;">
+                <div style="width: 50%; min-width: 400px; max-width: 800px; height: 75%; min-height:300px; max-height: 900px; background-color: #EEEEEE; border-radius: 5px; z-index: 2;">
+                    <div style="height:calc(1.5rem + 20px); width: 100%; display: flex; justify-content: space-between; align-items: stretch; background-color: rgb(98,98,98); border-top-left-radius: 5px; border-top-right-radius: 5px;">
+                        <div style="display: flex; justify-content: start; align-items: stretch;">
+                            <button class="book_tab" style="border-top-left-radius: 5px;" id="btn_1">How to use it</button>
+                            <button class="book_tab" id="btn_2">How it works</button>
+                            <button class="book_tab" id="btn_3">Contact</button>
+                        </div>
+                        <button id="close_info_book" class="close_button">✖</button>
+
+                    </div>
+                    <div style="height: calc(100% - (1.5rem + 20px)); width: 100%; padding: 10px; box-sizing: border-box; overflow-y: auto;">
+                        <div id="current_content" style="width: 100%;"></div>
+                        <template id="how_to_use_it">
+                            <div style="font-size: 1.2rem;">
+                                <h2>How to Use It</h2>
+                                <p>
+                                    To use this app, simply enter your ECF rating code and select the time controls you want to graph. You can also choose the timescale in months. The timescale is how many of the last months' ratings will be plotted. Once you have entered all the information, click the "Go" button to generate the graph.
+                                </p>
+                            </div>
+                        </template>
+                        <template id="how_it_works">
+                            <div style="font-size: 1.2rem;">
+                                <h2>How It Works</h2>
+                                <p>
+                                    When, the go button is pressed, the software first validates that the inputs are valid, i.e. you have entered things that make sense.
+                                </p><p>
+                                    Then, the software uses the timescale to send a bunch of requests to the ECF's rating database to get the ratings for the selected time controls for the last X months.
+                                </p><p>
+                                    Once the server has sent back all the data, the software simply does some code to put the data on a graph.
+                                </p>
+                            </div>
+                        </template>
+                        <template id="contact">
+                            <div style="font-size: 1.2rem;">
+                                <h2>Contact</h2>
+                                <p>
+                                    If you have any questions or feedback, please contact the developer at LiuY1902@outlook.com. I might not respond very fast, as I rarely recieve emails, but I will try to get back to you as soon as possible.
+                                </p>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <div style="font-size: 1rem; position: fixed; bottom: 0px; left: 0.3rem;">
+            This software is not licensed by or affiliated with the ECF.
+        </div>
+        
+        <div style="position: absolute; bottom: 0px; right: 0;">
+            <button id="info_button">
+                Info
+            </button>
+        </div>
+
+        <script src="script.js" async defer type="module"></script>
+    </body>
+</html>
