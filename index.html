@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
     To do list:
-    
+
 -->
 
 <html>
@@ -84,7 +84,8 @@
                         <div style="display: flex; justify-content: start; align-items: stretch;">
                             <button class="book_tab" style="border-top-left-radius: 5px;" id="btn_1">How to use it</button>
                             <button class="book_tab" id="btn_2">How it works</button>
-                            <button class="book_tab" id="btn_3">Contact</button>
+                            <button class="book_tab" id="btn_3">Troubleshooting</button>
+                            <button class="book_tab" id="btn_4">Contact</button>
                         </div>
                         <button id="close_info_book" class="close_button">✖</button>
 
@@ -107,7 +108,7 @@
                                 </p><p>
                                     Then, the software uses the timescale to send a bunch of requests to the ECF's rating database to get the ratings for the selected time controls for the last X months.
                                 </p><p>
-                                    Once the server has sent back all the data, the software simply does some code to put the data on a graph.
+                                    Once the server has sent back all the data, the software converts any 3-digit codes into it's 4-digit equivalent then puts in on the graph.
                                 </p>
                             </div>
                         </template>
@@ -116,6 +117,44 @@
                                 <h2>Contact</h2>
                                 <p>
                                     If you have any questions or feedback, please contact the developer at LiuY1902@outlook.com. I might not respond very fast, as I rarely recieve emails, but I will try to get back to you as soon as possible.
+                                </p>
+                            </div>
+                        </template>
+                        <template id="troubleshooting">
+                            <div style="font-size: 1.2rem;">
+                                <h2>Troubleshooting</h2>
+                                <p>
+                                    This page is meant to help you fix errors you encounter, if you still encounter issues, e-mail liuy1902@outlook.com.
+                                </p>
+                                <p>
+                                    If you get a <b>Failed to fetch</b> error, then it could be from many reasons.
+                                    <ol>
+                                        <li>The timescale is too large. The timescale limit for each account is different, and the amount of time controls also affects it. The timescale values in the table below could be off by up to 20.
+                                            <table style="margin-top: 10px; margin-bottom: 10px;">
+                                                <tr style="background-color: rgba(0,0,0,0.05);">
+                                                    <th style="font-weight: 500;">No. of Time Controls</th>
+                                                    <th style="font-weight: 500;">Approx. Maximum timescale</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>150</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>200</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>505</td>
+                                                </tr>
+                                            </table> </li>
+                                        <li>Your internet connection is not very good.</li>
+                                        <li>You have reached the maximum processing time per day. Highly unlikely but only one minute of internet requests to the ECF's server is allowed per device. Each request takes about 15 milliseconds and the number of requests sent is equal to the <span style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">timescale &times number of time controls </span>, so you probably won't be exceeding that anytime soon.</li>
+                                            
+                                    </ol>
+                                </p>
+                                <p>
+                                    If you get a <b>Cannot read properties of undefined (reading 'full_name')</b> error, then it is because the ECF rating code is invalid.
                                 </p>
                             </div>
                         </template>

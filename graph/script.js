@@ -1,20 +1,29 @@
 function get_data() {
-    const urlParams = new URLSearchParams(window.location.search)
-    const full_name = urlParams.get("name")
-    const serializedData = urlParams.get("data")
+    const serializedData = sessionStorage.getItem("ecfGraphData")
 
-    if (full_name === null || serializedData === null) {
-        throw new Error("The graph URL is missing the player name or rating data.")
+    if (serializedData === null) {
+        throw new Error("No player rating data was found. Return to the home page and generate a graph.")
     }
 
     let data
     try {
         data = JSON.parse(serializedData)
     } catch {
-        throw new Error("The graph URL contains invalid rating data.")
+        throw new Error("The saved player rating data is invalid.")
     }
 
-    return { full_name, data }
+    if (
+        data === null
+        || typeof data !== "object"
+        || typeof data.full_name !== "string"
+        || data.data === null
+        || typeof data.data !== "object"
+        || Array.isArray(data.data)
+    ) {
+        throw new Error("The saved player rating data is incomplete.")
+    }
+
+    return data
 }
 
 const { full_name, data } = get_data()
@@ -89,6 +98,7 @@ function convert_date(date) {
 }
 
 function add_graph(data) {
+    const point_size = get_point_size(data)
     // This is one way of doing data
     //const exampleData = {
     //    labels:[1,2,3,4,5],
@@ -153,7 +163,7 @@ function add_graph(data) {
         },
         elements: {
             point: {
-                borderWidth: 3
+                radius: point_size,
             },
         },
         animation: {
@@ -175,4 +185,18 @@ function add_graph(data) {
 
 function go_back() {
     window.open("../", "_self")
+}
+
+function get_point_size(data) {
+    // Implementation for determining point size based on data length
+    const len = data.datasets[0].data.length
+    if (len < 25) {
+        return 4
+    } else if (len < 51) {
+        return 3
+    } else if (len < 121) {
+        return 2
+    } else {
+        return 0
+    }
 }

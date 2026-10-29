@@ -10,6 +10,8 @@ document.addEventListener("click", (event) => {
     } else if (event.target.closest("#btn_2")) {
         how_it_works()
     } else if (event.target.closest("#btn_3")) {
+        troubleshooting()
+    } else if (event.target.closest("#btn_4")) {
         contact()
     }
 })
@@ -148,8 +150,7 @@ function create_date_list(timescale) {
     const current = new Date();
 
     for (let i = 0; i < timescale; i++) {
-        const running = new Date(current);
-        running.setMonth(current.getMonth() - i);
+        const running = new Date(current.getFullYear(), current.getMonth() - i, 1);
 
         let formatted = String(running.getFullYear());
         let month = String(running.getMonth() + 1).padStart(2, "0");
@@ -163,11 +164,9 @@ function create_date_list(timescale) {
 
 
 function convert_and_open(name, data) {
-    const graphUrl = new URL("graph/", window.location.href)
-    graphUrl.searchParams.set("name", name)
-    graphUrl.searchParams.set("data", JSON.stringify(data))
-
-    window.open(graphUrl.href,"_self")
+    //alert(JSON.stringify(data).length)
+    sessionStorage.setItem("ecfGraphData", JSON.stringify({ full_name: name, data }))
+    window.location.assign(new URL("graph/", window.location.href))
 }
 
 function open_info() {
@@ -193,4 +192,8 @@ function how_it_works() {
 
 function contact() {
     document.getElementById("current_content").innerHTML = document.getElementById("contact").innerHTML;
+}
+
+function troubleshooting() {
+    document.getElementById("current_content").innerHTML = document.getElementById("troubleshooting").innerHTML;
 }
