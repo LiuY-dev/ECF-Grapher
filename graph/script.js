@@ -26,11 +26,39 @@ function get_data() {
     return data
 }
 
-const { full_name, data } = get_data()
-//alert(JSON.stringify(data))
-document.getElementById("title").innerText = full_name + "'s Rating" 
+const gameCountLabels = {
+    id: "gameCountLabels",
+    afterDatasetsDraw(chart) {
+        const { ctx } = chart
+        ctx.save()
+        ctx.fillStyle = "#222"
+        ctx.font = "12px sans-serif"
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+
+        chart.data.datasets.forEach((dataset, datasetIndex) => {
+            const meta = chart.getDatasetMeta(datasetIndex)
+            meta.data.forEach((bar, dataIndex) => {
+                const count = dataset.counts[dataIndex]
+                const { x, y, base } = bar.getProps(["x", "y", "base"], true)
+                const segmentWidth = Math.abs(x - base)
+                const label = String(count)
+                if (segmentWidth >= ctx.measureText(label).width + 8) {
+                    ctx.fillText(label, (x + base) / 2, y)
+                }
+            })
+        })
+
+        ctx.restore()
+    }
+}
+
+const { full_name, data , game_data} = get_data()
+//alert(JSON.stringify(game_data))
+document.getElementById("title").innerText = full_name + "'s Analytics" 
 var graphData = format_data(data)
 add_graph(graphData)
+add_game_stats_charts(game_data)
 
 function format_data(data) {
     var formatted = {
@@ -125,6 +153,7 @@ function add_graph(data) {
     }
 
     const options = {
+        maintainAspectRatio: false,
         scales: {
             x: {
                 title: {
@@ -182,6 +211,148 @@ function add_graph(data) {
         }
     )
 }
+
+
+function add_game_stats_charts(game_data) {
+    const timeControls = [
+        ["S", "Standard"],
+        ["R", "Rapid"],
+        ["B", "Blitz"]
+    ]
+    const gamesByControl = Object.fromEntries(
+        timeControls.map(([control]) => [
+            control,
+            Array.isArray(game_data?.[control]) ? game_data[control] : []
+        ])
+    )
+    const allGames = timeControls.flatMap(([control]) => gamesByControl[control])
+    const chartGroups = [
+        ...timeControls.map(([control, label]) => [label, gamesByControl[control]]),
+        ["Total", allGames]
+    ]
+    const container = document.getElementById("game_stats_charts")
+
+    for (const [label, games] of chartGroups) {
+        const card = document.createElement("article")
+        card.className = "game-stats-card"
+
+        const heading = document.createElement("h3")
+        heading.textContent = label
+        card.appendChild(heading)
+
+        const stats = [
+            ["White", get_game_outcome_rates(games, "white")],
+            ["Black", get_game_outcome_rates(games, "black")],
+            ["Total", get_game_outcome_rates(games)]
+        ]
+        if (stats[2][1].gameCount === 0) {
+            const emptyMessage = document.createElement("p")
+            emptyMessage.className = "game-stats-empty"
+            emptyMessage.textContent = "No games available"
+            card.appendChild(emptyMessage)
+        } else {
+            const chartContainer = document.createElement("div")
+            chartContainer.className = "game-stats-chart"
+            const canvas = document.createElement("canvas")
+            canvas.setAttribute("aria-label", `${label} win, draw, and loss rates`)
+            chartContainer.appendChild(canvas)
+            card.appendChild(chartContainer)
+
+            const outcomes = [
+                ["Win", "wins", "winRate", "#70AD87"],
+                ["Draw", "draws", "drawRate", "#F2C14E"],
+                ["Loss", "losses", "lossRate", "#D96C6C"]
+            ]
+            const datasets = outcomes.map(([outcome, countKey, rateKey, color]) => ({
+                label: outcome,
+                data: stats.map(([, result]) => result[rateKey]),
+                counts: stats.map(([, result]) => result[countKey]),
+                backgroundColor: color,
+                borderColor: "#fff",
+                borderWidth: 1
+            }))
+
+            new Chart(canvas, {
+                type: "bar",
+                data: {
+                    labels: stats.map(([groupLabel]) => groupLabel),
+                    datasets
+                },
+                options: {
+                    indexAxis: "y",
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            stacked: true
+                        },
+                        x: {
+                            stacked: true,
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: (value) => `${value}%`
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: "top"
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const count = context.dataset.counts[context.dataIndex]
+                                    return `${context.dataset.label}: ${context.parsed.x.toFixed(1)}% (${count} games)`
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [gameCountLabels]
+            })
+        }
+
+        container.appendChild(card)
+    }
+}
+
+function get_game_outcome_rates(games, colour) {
+    const outcomes = { wins: 0, draws: 0, losses: 0 }
+
+    for (const game of games) {
+        if (game === null || typeof game !== "object") {
+            continue
+        }
+        if (
+            colour
+            && (typeof game.colour !== "string" || !game.colour.toLowerCase().startsWith(colour[0]))
+        ) {
+            continue
+        }
+
+        const score = Number(game.score)
+        if (score === 1 || score === 10) {
+            outcomes.wins++
+        } else if (score === 0.5 || score === 5) {
+            outcomes.draws++
+        } else if (score === 0) {
+            outcomes.losses++
+        }
+    }
+
+    const gameCount = outcomes.wins + outcomes.draws + outcomes.losses
+    const rate = (count) => gameCount === 0 ? 0 : count / gameCount * 100
+
+    return {
+        gameCount,
+        ...outcomes,
+        winRate: rate(outcomes.wins),
+        drawRate: rate(outcomes.draws),
+        lossRate: rate(outcomes.losses)
+    }
+}
+
 
 function go_back() {
     window.open("../", "_self")

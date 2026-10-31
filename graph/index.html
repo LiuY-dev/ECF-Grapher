@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title id="title">Your Graph</title>
+        <title id="title">Your Analytics</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="../style.css">
@@ -13,18 +13,25 @@
     <body>
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
             <div style="height: 15px;"></div>
-            <div style="width: 100%; max-width: 1080px;">
+            <div class="graph-container">
                 <canvas id="graph">
 
                 </canvas>
             </div>
+            <section class="game-stats">
+                <h2>Game Results</h2>
+                <div id="game_stats_charts" class="game-stats-grid"></div>
+            </section>
         </div>
         
+        <!--
         <div style="font-size: 1rem; position: fixed; bottom: 0px; left: 0.3rem; z-index: 10;">
             This software is not licensed by or affiliated with the ECF.
         </div>
+        -->
 
-        <div style="position: absolute; bottom: 0px; right: 0;">
+
+        <div style="position: fixed; bottom: 0px; right: 0;">
             <button id="back_button" onclick="go_back()">
                 Go back
             </button>

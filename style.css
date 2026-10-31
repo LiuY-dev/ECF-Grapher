@@ -14,10 +14,31 @@ body {
     border-radius: 5px;
     border-width: 1px;
     border-style: solid;
-    width: calc(100% - 8px);
+    box-sizing: border-box;
+    width: 100%;
     font-size: 2rem;
     margin-top: 2px;
     border-color: rgb(80,80,80);
+}
+
+.settings_container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    width: 90%;
+    max-width: 1000px;
+    margin-inline: auto;
+}
+
+.settings_box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;
+    background-color: #fff;
 }
 
 .input_prompt {
@@ -25,16 +46,32 @@ body {
     font-weight: 500;
 }
 
+.field_label {
+    margin-top: 8px;
+    font-size: 1rem;
+}
+
+.time_controls {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+}
+
 .check_pair_container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 40px;
+    min-height: 34px;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 .check {
-    margin-right: 13px;
-    transform: scale(3);
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: rgb(90,98,104);
 }
 
 button {
@@ -43,14 +80,28 @@ button {
 }
 
 #go_button{
-    width: 100%;
+    display: block;
+    width: 90%;
+    max-width: 1000px;
     border-radius: 5px;
     height: calc(2rem + 20px);
     font-size: 2rem;
-    margin-top: 50px;
+    margin: 20px auto 0;
     background-color: rgb(108,117,125);
     border-style: none;
     color: white;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 700px) {
+    .settings_container {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+
+    #go_button {
+        max-width: 500px;
+    }
 }
 
 #back_button, #info_button {
@@ -67,13 +118,21 @@ button {
 }
 
 .book_tab {
+    box-sizing: border-box;
+    flex: 1 1 0;
+    min-width: 0;
     border-radius: 0px;
     border-style: none;
     border-right: 2px solid rgb(115,115,115);
     background-color: rgb(98,98,98);
     color: white;
-    font-size: 1rem;
-    padding-inline: 15px;
+    font-size: clamp(0.6rem, 2.5vw, 1rem);
+    padding-inline: clamp(2px, 1vw, 15px);
+}
+
+.book_tabs {
+    flex: 1 1 0;
+    min-width: 0;
 }
 
 .book_tab:hover {
@@ -82,6 +141,8 @@ button {
 }
 
 .close_button {
+    box-sizing: border-box;
+    flex: 0 0 calc(1.5rem + 20px);
     border-radius: 0px;
     border-top-right-radius: 5px;
     border-style: none;
@@ -99,8 +160,79 @@ table {
   width: 100%;
 }
 
+.game-stats {
+    width: 90%;
+    max-width: 1080px;
+    margin: 24px auto 80px;
+}
+
+.graph-container {
+    box-sizing: border-box;
+    width: 90%;
+    max-width: 1080px;
+    padding: 16px;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;
+    background-color: #fff;
+    min-height: 400px;
+}
+
+.graph-container canvas {
+    display: block;
+    width: 100%;
+}
+
+.game-stats h2 {
+    color: #353A40;
+    text-align: center;
+}
+
+.game-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.game-stats-card {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid #c8c8c8;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.game-stats-card h3 {
+    margin: 0 0 12px;
+    color: #353A40;
+}
+
+.game-stats-chart {
+    height: 280px;
+}
+
+.game-stats-empty {
+    display: flex;
+    min-height: 280px;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+}
+
 td, th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+}
+
+@media (max-width: 700px) {
+    .game-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 20px;
+    margin-bottom: 8px;
 }

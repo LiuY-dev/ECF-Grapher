@@ -6,9 +6,7 @@ document.addEventListener("click", (event) => {
     if (event.target.closest("#close_info_book")) {
         close_info()
     } else if (event.target.closest("#btn_1")) {
-        how_to_use_it()
-    } else if (event.target.closest("#btn_2")) {
-        how_it_works()
+        faqs()
     } else if (event.target.closest("#btn_3")) {
         troubleshooting()
     } else if (event.target.closest("#btn_4")) {
@@ -87,6 +85,7 @@ async function collect_data(rating_code, timescale, standard, rapid, blitz) {
     }
 
     try {
+        const game_data = await collect_game_data(rating_code, time_ctrls)
         const requests = []
 
         const res = await fetch("https://rating.englishchess.org.uk/api/players/rating-code?code=" + rating_code)
@@ -98,8 +97,8 @@ async function collect_data(rating_code, timescale, standard, rapid, blitz) {
             for (const ctrl of time_ctrls) {
                 requests.push(
                     send_request(`https://rating.englishchess.org.uk/api/ratings?player_no=${rating_code}&domain=${ctrl}&date=${date}`)
-                        .then((rating) => {
-                            data[ctrl][date] = rating
+                        .then((res) => {
+                            data[ctrl][date] = res.data.original_rating
                         })
                         .catch((error) => {
                             if (error.message === "Player has no ratings for the given date") {
@@ -119,7 +118,7 @@ async function collect_data(rating_code, timescale, standard, rapid, blitz) {
             name = `${name.slice(commaIndex + 1).trim()} ${name.slice(0, commaIndex).trim()}`
         }
 
-        convert_and_open(name,data)
+        convert_and_open(name,data, game_data)
 
     } catch (error) {
         await popup(`Unable to retrieve ratings: ${error.message}`)
@@ -139,7 +138,7 @@ async function send_request(url) {
         throw new Error(result.message || "The API did not return a rating")
     }
 
-    return result.data.original_rating
+    return result
 }
 
 
@@ -163,9 +162,9 @@ function create_date_list(timescale) {
 }
 
 
-function convert_and_open(name, data) {
+function convert_and_open(name, data, game_data) {
     //alert(JSON.stringify(data).length)
-    sessionStorage.setItem("ecfGraphData", JSON.stringify({ full_name: name, data }))
+    sessionStorage.setItem("ecfGraphData", JSON.stringify({ full_name: name, data , game_data}))
     window.location.assign(new URL("graph/", window.location.href))
 }
 
@@ -182,12 +181,8 @@ function close_info() {
     }
 }
 
-function how_to_use_it() {
-    document.getElementById("current_content").innerHTML = document.getElementById("how_to_use_it").innerHTML;
-}
-
-function how_it_works() {
-    document.getElementById("current_content").innerHTML = document.getElementById("how_it_works").innerHTML;
+function faqs() {
+    document.getElementById("current_content").innerHTML = document.getElementById("faqs").innerHTML;
 }
 
 function contact() {
@@ -196,4 +191,25 @@ function contact() {
 
 function troubleshooting() {
     document.getElementById("current_content").innerHTML = document.getElementById("troubleshooting").innerHTML;
+}
+
+async function collect_game_data(rating_code, time_ctrls) {
+    const requests = time_ctrls.map(async (ctrl) => {
+        const params = new URLSearchParams({
+            player_no: rating_code,
+            domain: ctrl,
+            limit: "5000"
+        })
+        const response = await send_request(`https://rating.englishchess.org.uk/api/games?${params}`)
+        const games = response.data.games.map((game) => ({
+            date: game.game_date,
+            colour: game.colour,
+            score: game.score === 5 ? 0.5 : game.score,
+            rating_difference: game.opponent_rating - game.player_rating,
+        }))
+        return [ctrl, games]
+    })
+
+    const responses = Object.fromEntries(await Promise.all(requests))
+    return responses
 }
